@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Labirin</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Game Labirin</h1>
+    <div class="difficulty-buttons">
+        <button id="easyButton">Easy</button>
+        <button id="mediumButton">Medium</button>
+        <button id="hardButton">Hard</button>
+    </div>
+    <div class="container">
+        <canvas id="mazeCanvas" width="500" height="500"></canvas>
+        <div id="stepsCount">
+            <h2>Steps Taken:</h2>
+            <p id="steps">0</p>
+        </div>
+    </div>
+    <img id="playerImage" src="D:\\Downloads\\nail.png" style="display: none;">
+    <button id="solveButtonDijkstra">Solve with Dijkstra</button>
+    <button id="solveButtonBruteForce">Solve with Brute Force</button>
+    <button id="solveButtonGreedy">Solve with Greedy</button>
+    <script src="script.js"></script>
+</body>
+</html>
