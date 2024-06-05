@@ -8,92 +8,115 @@ const easyButton = document.getElementById('easyButton');
 const mediumButton = document.getElementById('mediumButton');
 const hardButton = document.getElementById('hardButton');
 
-let rows = 25;
-let cols = 25;
+let rows = 20;
+let cols = 20;
 let tileSize = canvas.width / cols;
 
 let stepsTaken = 0;
 
 const easyMaze = [
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 
-    [1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1],
-    [1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1],
-    [0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1],
-    [1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1], 
-    [1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1], 
-    [1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1], 
-    [1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1], 
-    [1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1], 
-    [1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1], 
-    [1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1], 
-    [1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1], 
-    [1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1], 
-    [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1], 
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1]
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [0, 0, 0, 1, 0, 0, 0, 1, 1, 1],
+    [1, 0, 0, 1, 0, 1, 1, 1, 0, 1],
+    [1, 1, 0, 1, 0, 1, 1, 1, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 1, 0, 1],
+    [1, 0, 1, 1, 0, 1, 0, 1, 0, 1],
+    [1, 1, 1, 1, 1, 1, 0, 1, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 0, 0, 1, 1, 1, 1],
+    [1, 1, 1, 1, 0, 1, 1, 1, 1, 1]
 ];
 
 const mediumMaze = [
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
-    [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1], 
-    [1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1], 
-    [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0], 
-    [1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1], 
-    [1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1], 
-    [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1], 
-    [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1], 
-    [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1], 
-    [1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1], 
-    [1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1], 
-    [1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1], 
-    [1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1], 
-    [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1], 
-    [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1],
-    [0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1], 
-    [1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1], 
-    [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1], 
-    [1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1], 
-    [1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1], 
-    [1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1], 
-    [1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1], 
-    [1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1]
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1], 
+    [1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1], 
+    [0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1],
+    [1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1],
+    [1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1],
+    [1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1],
+    [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1],
+    [1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1],
+    [1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1],
+    [1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1],
+    [0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1],
+    [1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1],
+    [1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
+    [1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ];
 
 const hardMaze = [
-    // Labirin 45x45 yang Anda buat
+    [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1],
+    [1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1],
+    [1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0],
+    [1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1],
+    [1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1],
+    [1, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1],
+    [1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1],
+    [1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1],
+    [1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1],
+    [0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
+    [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 0],
+    [1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1],
+    [1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1],
+    [1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1],
+    [1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1],
+    [1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1],
+    [1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1],
+    [1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1],
+    [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
+    [1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1],
+    [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1]
 ];
 
 const player = {
-    x: 13,
-    y: 14,
-    width: 32, // Lebar gambar pemain
-    height: 32, // Tinggi gambar pemain
-    image: new Image(), // Element gambar pemain
-    loaded: false // Apakah gambar sudah dimuat atau belum
+    x: 10,
+    y: 9,
+    width: tileSize,
+    height: tileSize,
+    image: new Image(),
+    loaded: false
 };
 
-player.image.src = 'D:\\Downloads\\nail.png'; // Ganti 'path_to_your_image.png' dengan lokasi file gambar Anda
+player.image.src = 'nail.png';
 player.image.onload = function() {
     player.loaded = true;
-    alert('udah ke load!')
     draw();
 };
 
 const finishes = {
-    easy:
-    [
-        { x: 0, y: 3, color: 'green' },
-        { x: 10, y: 14, color: 'green' },
+    easy: [
+        { x: 0, y: 1, color: 'green' },
+        { x: 4, y: 9, color: 'green' }
     ],
-    medium: 
-    [
-        { x: 9, y: 0, color: 'green' },
+    medium: [
+        { x: 0, y: 2, color: 'green' },
+        { x: 0, y: 14, color: 'green' },
+        { x: 18, y: 0, color: 'green' },
+        { x: 10, y: 19, color: 'green' }
+    ],
+    hard: [
+        { x: 1, y: 0, color: 'green' },
+        { x: 29, y: 6, color: 'green' },
         { x: 0, y: 16, color: 'green' },
-        { x: 24, y: 4, color: 'green' },
-        { x: 18, y: 24, color: 'green' }
-    ],
-    hard: { x: 43, y: 43, color: 'green' }  // Finish point for hardMaze
+        { x: 29, y: 18, color: 'green' },
+        { x: 7, y: 29, color: 'green' },
+        { x: 24, y: 29, color: 'green'}
+    ]
 };
 
 let maze = mediumMaze;
@@ -102,24 +125,28 @@ let currentFinish = finishes.medium;
 function updateMaze(difficulty) {
     if (difficulty === 'easy') {
         maze = easyMaze;
-        rows = 15;
-        cols = 15;
-        player.x = 8
-        player.y = 8
+        rows = 10;
+        cols = 10;
+        player.x = 4;
+        player.y = 4;
         currentFinish = finishes.easy;
     } else if (difficulty === 'medium') {
         maze = mediumMaze;
-        rows = 25;
-        cols = 25;
-        player.x = 13
-        player.y = 14
+        rows = 20;
+        cols = 20;
+        player.x = 10;
+        player.y = 9;
         currentFinish = finishes.medium;
     } else if (difficulty === 'hard') {
         maze = hardMaze;
-        rows = 45;
-        cols = 45;
+        rows = 30;
+        cols = 30;
+        player.x = 14;
+        player.y = 14;
         currentFinish = finishes.hard;
     }
+    player.width = canvas.width / cols
+    player.height = canvas.width / cols
     tileSize = canvas.width / cols;
     stepsTaken = 0;
     updateSteps();
@@ -147,8 +174,7 @@ function drawPlayer() {
     if (player.loaded) {
         ctx.drawImage(player.image, player.x * tileSize, player.y * tileSize, player.width, player.height);
     } else {
-        // Jika gambar belum dimuat, Anda bisa menampilkan pemain sebagai persegi biru sementara
-        ctx.fillStyle = player.color;
+        ctx.fillStyle = 'blue';
         ctx.fillRect(player.x * tileSize, player.y * tileSize, tileSize, tileSize);
     }
 }
@@ -186,25 +212,17 @@ function movePlayer(dx, dy) {
         updateSteps();
         if (Array.isArray(currentFinish)) {
             if (currentFinish.some(finish => player.x === finish.x && player.y === finish.y)) {
+                stepsTaken++
+                updateSteps();
                 alert('Congratulations! You reached a finish!');
                 stepsTaken = 0;
-                if (rows == 15) {
-                    player.x = 8
-                    player.y = 8
-                } else if (rows = 25) {
-                    player.x = 13
-                    player.y = 14
+                if (rows === 10) {
+                    updateMaze('easy');
+                } else if (rows === 20) {
+                    updateMaze('medium');
+                } else if (rows === 30) {
+                    updateMaze('hard');
                 }
-            }
-        } else if (player.x === currentFinish.x && player.y === currentFinish.y) {
-            alert('Congratulations! You reached the finish!');
-            stepsTaken = 0;
-            if (rows == 15) {
-                player.x = 8
-                player.y = 8
-            } else if (rows == 25) {
-                player.x = 13
-                player.y = 14
             }
         }
     }
@@ -217,7 +235,9 @@ function moveAlongPath(path) {
         if (index < path.length) {
             player.x = path[index][0];
             player.y = path[index][1];
-            stepsTaken++;
+            if (index > 0) {
+                stepsTaken++;
+            }
             updateSteps();
             draw();
             index++;
@@ -268,11 +288,11 @@ function dijkstra() {
         path.push([cx, cy]);
         [cx, cy] = previous[cy][cx];
     }
+    path.push([player.x, player.y]);
     path.reverse();
 
     return path;
 }
-
 
 function bruteForce() {
     const directions = [
@@ -281,7 +301,8 @@ function bruteForce() {
 
     function dfs(x, y, visited, path) {
         if (currentFinish.some(finish => finish.x === x && finish.y === y)) {
-            return path;
+            allPaths.push([...path, [x, y]]);
+            return;
         }
 
         visited[y][x] = true;
@@ -291,18 +312,28 @@ function bruteForce() {
             const ny = y + dy;
 
             if (nx >= 0 && ny >= 0 && nx < cols && ny < rows && !visited[ny][nx] && maze[ny][nx] === 0) {
-                const newPath = dfs(nx, ny, visited, [...path, [nx, ny]]);
-                if (newPath) return newPath;
+                dfs(nx, ny, visited, [...path, [x, y]]);
             }
         }
 
         visited[y][x] = false;
-        return null;
     }
 
+    const allPaths = [];
     const visited = Array(rows).fill(null).map(() => Array(cols).fill(false));
-    const path = dfs(player.x, player.y, visited, [[player.x, player.y]]);
-    return path || [];
+    dfs(player.x, player.y, visited, []);
+
+    if (allPaths.length === 0) return [];
+
+    // Find the shortest path
+    let bestPath = allPaths[0];
+    for (const path of allPaths) {
+        if (path.length < bestPath.length) {
+            bestPath = path;
+        }
+    }
+
+    return bestPath;
 }
 
 function greedy() {
@@ -345,25 +376,23 @@ function greedy() {
         path.push([cx, cy]);
         [cx, cy] = previous[cy][cx];
     }
+    path.push([player.x, player.y]); // Include the initial position
     path.reverse();
 
     return path;
 }
 
 solveButtonDijkstra.addEventListener('click', () => {
-    stepsTaken = 0;
     const path = dijkstra();
     moveAlongPath(path);
 });
 
 solveButtonBruteForce.addEventListener('click', () => {
-    stepsTaken = 0;
     const path = bruteForce();
     moveAlongPath(path);
 });
 
 solveButtonGreedy.addEventListener('click', () => {
-    stepsTaken = 0;
     const path = greedy();
     moveAlongPath(path);
 });
