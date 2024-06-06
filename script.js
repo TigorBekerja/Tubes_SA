@@ -14,10 +14,17 @@ let tileSize = canvas.width / cols;
 
 let stepsTaken = 0;
 
+const wall = new Image();
+wall.src = 'assets/wall.png'
+const path = new Image();
+path.src = 'assets/road.png'
+const finishImage = new Image();
+finishImage.src = 'assets/finish.jpg';
+
 const easyMaze = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [0, 0, 0, 1, 0, 0, 0, 1, 1, 1],
-    [1, 0, 0, 1, 0, 1, 1, 1, 0, 1],
+    [1, 0, 0, 1, 0, 1, 0, 1, 0, 1],
     [1, 1, 0, 1, 0, 1, 1, 1, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 1, 0, 1],
     [1, 0, 1, 1, 0, 1, 0, 1, 0, 1],
@@ -46,7 +53,7 @@ const mediumMaze = [
     [1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1],
     [1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
     [1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1],
+    [1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ];
 
@@ -92,7 +99,7 @@ const player = {
     loaded: false
 };
 
-player.image.src = 'nail.png';
+player.image.src = 'assets/nail.png';
 player.image.onload = function() {
     player.loaded = true;
     draw();
@@ -100,22 +107,22 @@ player.image.onload = function() {
 
 const finishes = {
     easy: [
-        { x: 0, y: 1, color: 'green' },
-        { x: 4, y: 9, color: 'green' }
+        { x: 0, y: 1},
+        { x: 4, y: 9}
     ],
     medium: [
-        { x: 0, y: 2, color: 'green' },
-        { x: 0, y: 14, color: 'green' },
-        { x: 18, y: 0, color: 'green' },
-        { x: 10, y: 19, color: 'green' }
+        { x: 0, y: 2},
+        { x: 0, y: 14},
+        { x: 18, y: 0},
+        { x: 10, y: 19}
     ],
     hard: [
-        { x: 1, y: 0, color: 'green' },
-        { x: 29, y: 6, color: 'green' },
-        { x: 0, y: 16, color: 'green' },
-        { x: 29, y: 18, color: 'green' },
-        { x: 7, y: 29, color: 'green' },
-        { x: 24, y: 29, color: 'green'}
+        { x: 1, y: 0},
+        { x: 29, y: 6},
+        { x: 0, y: 16},
+        { x: 29, y: 18},
+        { x: 7, y: 29},
+        { x: 24, y: 29}
     ]
 };
 
@@ -129,6 +136,7 @@ function updateMaze(difficulty) {
         cols = 10;
         player.x = 4;
         player.y = 4;
+        player.image.src = 'assets/bocilkafahmi.png'
         currentFinish = finishes.easy;
     } else if (difficulty === 'medium') {
         maze = mediumMaze;
@@ -136,13 +144,15 @@ function updateMaze(difficulty) {
         cols = 20;
         player.x = 10;
         player.y = 9;
+        player.image.src = 'assets/nail.png';
         currentFinish = finishes.medium;
     } else if (difficulty === 'hard') {
         maze = hardMaze;
         rows = 30;
         cols = 30;
-        player.x = 14;
+        player.x = 15;
         player.y = 14;
+        player.image.src = 'assets/tigormuda.png'
         currentFinish = finishes.hard;
     }
     player.width = canvas.width / cols
@@ -161,11 +171,10 @@ function drawMaze() {
     for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
             if (maze[row][col] === 1) {
-                ctx.fillStyle = 'black';
+                ctx.drawImage(wall, col * tileSize, row * tileSize, tileSize, tileSize);
             } else {
-                ctx.fillStyle = 'white';
+                ctx.drawImage(path, col * tileSize, row * tileSize, tileSize, tileSize);
             }
-            ctx.fillRect(col * tileSize, row * tileSize, tileSize, tileSize);
         }
     }
 }
@@ -182,12 +191,10 @@ function drawPlayer() {
 function drawFinishes() {
     if (Array.isArray(currentFinish)) {
         currentFinish.forEach(finish => {
-            ctx.fillStyle = finish.color;
-            ctx.fillRect(finish.x * tileSize, finish.y * tileSize, tileSize, tileSize);
+            ctx.drawImage(finishImage, finish.x * tileSize, finish.y * tileSize, tileSize, tileSize);
         });
     } else {
-        ctx.fillStyle = currentFinish.color;
-        ctx.fillRect(currentFinish.x * tileSize, currentFinish.y * tileSize, tileSize, tileSize);
+        ctx.drawImage(finishImage, finish.x * tileSize, finish.y * tileSize, tileSize, tileSize);
     }
 }
 
@@ -210,23 +217,25 @@ function movePlayer(dx, dy) {
         player.y = newY;
         stepsTaken++;
         updateSteps();
+        draw();
         if (Array.isArray(currentFinish)) {
             if (currentFinish.some(finish => player.x === finish.x && player.y === finish.y)) {
-                stepsTaken++
                 updateSteps();
-                alert('Congratulations! You reached a finish!');
-                stepsTaken = 0;
-                if (rows === 10) {
-                    updateMaze('easy');
-                } else if (rows === 20) {
-                    updateMaze('medium');
-                } else if (rows === 30) {
-                    updateMaze('hard');
-                }
+                draw();  // Draw player at the finish before alert
+                setTimeout(() => {
+                    alert('Congratulations! You reached a finish!');
+                    stepsTaken = 0;
+                    if (rows === 10) {
+                        updateMaze('easy');
+                    } else if (rows === 20) {
+                        updateMaze('medium');
+                    } else if (rows === 30) {
+                        updateMaze('hard');
+                    }
+                }, 100);  // Slight delay to ensure the player is drawn
             }
         }
     }
-    draw();
 }
 
 function moveAlongPath(path) {
@@ -243,6 +252,21 @@ function moveAlongPath(path) {
             index++;
         } else {
             clearInterval(interval);
+            if (currentFinish.some(finish => player.x === finish.x && player.y === finish.y)) {
+                updateSteps();
+                draw(); 
+                setTimeout(() => {
+                    alert('Congratulations! You reached a finish!');
+                    stepsTaken = 0;
+                    if (rows === 10) {
+                        updateMaze('easy');
+                    } else if (rows === 20) {
+                        updateMaze('medium');
+                    } else if (rows === 30) {
+                        updateMaze('hard');
+                    }
+                }, 100);  // Slight delay to ensure the player is drawn
+            }
         }
     }, 100);
 }
